@@ -1,0 +1,8 @@
+streamlit
+groq
+plotly
+fpdf2
+pandas
+googlesearch-python
+requests
+python-dotenv
