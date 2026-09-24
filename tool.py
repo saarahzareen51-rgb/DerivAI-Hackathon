@@ -114,7 +114,7 @@ with st.sidebar:
                         context = fetch_online_content(chat_input)
                         full_prompt = f"Regulatory Context: {context}\n\nUser: {chat_input}"
                         res = groq_client.chat.completions.create(
-                            model="llama-3.3-70b-versatile",
+                            model="openai/gpt-oss-120b",
                             messages=[
                                 {"role": "system", "content": "You are a professional GRC expert for Deriv. Refer to MFSA and Cybersecurity standards."},
                                 {"role": "user", "content": full_prompt}
@@ -141,7 +141,7 @@ with tab1:
         if email_text:
             with st.spinner("Scanning for Phishing..."):
                 res = groq_client.chat.completions.create(
-                    model="llama-3.3-70b-versatile",
+                    model="openai/gpt-oss-120b",
                     messages=[{"role": "user", "content": f"Analyze for fraud and return Risk Score (0-10) and reasoning, and if the risk level is above 5 then map it to a relevant MITRE ATT&CK ID: {email_text}"}]
                 ).choices[0].message.content
                 score_match = re.search(r"\d+", res)
@@ -157,7 +157,7 @@ with tab2:
         if chat_text:
             with st.spinner("Analyzing Social Engineering..."):
                 res = groq_client.chat.completions.create(
-                    model="llama-3.3-70b-versatile",
+                    model="openai/gpt-oss-120b",
                     messages=[{"role": "user", "content": f"Audit for off-platform luring and trust abuse: {chat_text}"}]
                 ).choices[0].message.content
                 st.markdown(res)
@@ -170,7 +170,7 @@ with tab3:
             with st.spinner("Pixel Forensic Analysis..."):
                 b64 = encode_image(img_file)
                 res = groq_chat_with_retry(
-                    model="llama-3.2-11b-vision-preview",
+                    model="meta-llama/llama-4-scout-17b-16e-instruct",
                     messages=[{"role": "user", "content": [{"type": "text", "text": "Audit for tampering/Photoshop."}, {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{b64}"}}]}]
                 )
                 st.markdown(res)
@@ -180,7 +180,7 @@ with tab4:
     if st.button("Detect Machine Logic"):
         with st.spinner("Running Perplexity Check..."):
             res = groq_client.chat.completions.create(
-                model="llama-3.3-70b-versatile",
+                model="openai/gpt-oss-120b",
                 messages=[{"role": "user", "content": f"Is this AI generated? Provide probability %: {ai_txt}"}]
             ).choices[0].message.content
             st.markdown(res)
